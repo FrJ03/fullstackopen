@@ -1,17 +1,18 @@
-import Info from "./Info"
+import InfoParagraph from "./InfoParagraph"
+import StatisticLine from "./StatisticLine"
 
 const Statistics = (props) => {
     if(props.total !== 0){
         return (
             <div>
-                {props.stats.map(stat => <Info text={stat.text} value={stat.value}/>)}
+                {props.stats.map(stat => <StatisticLine text={stat.text} value={stat.value}/>)}
             </div>
         )
     }
     else{
         return (
             <div>
-                <Info text='No feedback given'/>
+                <InfoParagraph content='No feedback given'/>
             </div>
         )
     }
