@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Button from './Button'
+import Header from './Header'
 
 const App = () => {
   const anecdotes = [
@@ -14,6 +15,7 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [mostVoted, setMostVoted] =useState(0)
   const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
 
   const changeSelected = ()=>{
@@ -29,16 +31,23 @@ const App = () => {
     const copy = [...votes]
     copy[selected] += 1
     setVotes(copy)
+    if(copy[selected] > copy[mostVoted]){
+      setMostVoted(selected)
+    }
   }
 
   return (
     <div>
+      <Header content='Anecdote of the day'/>
       {anecdotes[selected]}
       <div>has {votes[selected]} votes</div>
       <div>
         <Button content='vote' onClick={vote}/>
         <Button content='next anecdote' onClick={changeSelected}/>
       </div>
+      <Header content='Anecdote with most votes'/>
+      {anecdotes[mostVoted]}
+      <div>has {votes[mostVoted]} votes</div>
     </div>
   )
 }
