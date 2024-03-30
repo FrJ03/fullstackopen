@@ -71,7 +71,7 @@ const App = () => {
         <Button content='bad' onClick={incrementBad}/>
       </div>
       <Header content='statistics'/>
-      <Statistics stats={statistics}/>
+      <Statistics stats={statistics} total={all}/>
     </div>
   )
 }
