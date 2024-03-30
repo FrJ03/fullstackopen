@@ -4,9 +4,11 @@ import StatisticLine from "./StatisticLine"
 const Statistics = (props) => {
     if(props.total !== 0){
         return (
-            <div>
-                {props.stats.map(stat => <StatisticLine text={stat.text} value={stat.value}/>)}
-            </div>
+            <table>
+                <tbody>
+                    {props.stats.map((stat, i) => <StatisticLine key={i} text={stat.text} value={stat.value}/>)}
+                </tbody>
+            </table>
         )
     }
     else{
