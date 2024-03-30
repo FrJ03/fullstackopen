@@ -1,7 +1,7 @@
 import { useState, useEffect, React } from 'react'
 import Header from './Header'
 import Button from './Button'
-import Info from './Info'
+import Statistics from './Statistics'
 
 const App = () => {
   // save clicks of each button to its own state
@@ -36,6 +36,32 @@ const App = () => {
     setPosotive(good / newAll)
   }
 
+  const statistics = [
+    {
+      text:'good',
+      value:good
+    },
+    {
+      text:'neutral',
+      value:neutral
+    },
+    {
+      text:'bad',
+      value:bad
+    },
+    {
+      text:'all',
+      value:all
+    },
+    {
+      text:'average',
+      value:avg
+    },
+    {
+      text:'positive',
+      value:positive + ' %'
+    },
+  ]
   return (
     <div>
       <Header content='give feedback'/>
@@ -45,12 +71,7 @@ const App = () => {
         <Button content='bad' onClick={incrementBad}/>
       </div>
       <Header content='statistics'/>
-      <Info text='good' value={good}/>
-      <Info text='neutral' value={neutral}/>
-      <Info text='bad' value={bad}/>
-      <Info text='all' value={all}/>
-      <Info text='average' value={avg}/>
-      <Info text='positive' value={positive + ' %'}/>
+      <Statistics stats={statistics}/>
     </div>
   )
 }
