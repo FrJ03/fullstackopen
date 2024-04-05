@@ -1,7 +1,8 @@
 const sumExercises = (parts) => {
-  let sum = 0;
-  parts.forEach((part) => {sum+=part.exercises});
-  return sum;
+  let total = parts.reduce((sum, part) => {
+    return sum + part.exercises
+  }, 0);
+  return total;
 }
 
 const Header = ({ course }) => <h1>{course}</h1>
@@ -46,6 +47,11 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name: 'Redux',
+        exercises: 11,
+        id: 4
       }
     ]
   }
