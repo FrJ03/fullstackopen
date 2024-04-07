@@ -2,12 +2,15 @@ import { useState } from 'react'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas',
-      number: '040-1234567'
-    }
-  ]) 
+    { name: 'Arto Hellas', number: '040-123456', id: 1 },
+    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
+  ])
+  const [personsFiltered, setPersonsFiltered] = useState(persons) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [filter, setFilter] = useState('')
 
   const personExists = (name, personsList) => {
     let ret = false
@@ -17,6 +20,21 @@ const App = () => {
       }
     }
     return ret
+  }
+
+  const filterPerson = (filterStr) => {
+    if(filterStr === ''){
+      setPersonsFiltered(persons)
+    }
+    else{
+      setPersonsFiltered(persons.filter((person) => person.name.toLowerCase().includes(filterStr.toLowerCase())))
+    }
+  }
+
+  const handlerFilter = (event) => {
+    const newFilter = event.target.value
+    setFilter(newFilter)
+    filterPerson(newFilter)
   }
 
   const handlerNameChange = (event) => 
@@ -29,10 +47,14 @@ const App = () => {
     event.preventDefault()
     const newPerson = {
       name: newName,
-      number: newNumber
+      number: newNumber,
+      id: persons[persons.length - 1].id + 1
     }
     if(personExists(newPerson.name, persons) === false){
-      setPersons(persons.concat(newPerson))
+      const newPersons = persons.concat(newPerson)
+      setPersons(newPersons)
+      setFilter('')
+      setPersonsFiltered(newPersons)
     }
     else{
       alert(`${newPerson.name} is already added to phonebook`)
@@ -44,6 +66,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <div>filter shown with <input value={filter} onChange={handlerFilter}/></div>
+      <h2>add a new</h2>
       <form onSubmit={addPerson}>
         <div>
           name: <input value={newName} onChange={handlerNameChange}/>
@@ -56,8 +80,8 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map((person, i) =>
-        <p key={i}>{person.name} {person.number}</p>
+      {personsFiltered.map(person =>
+        <p key={person.id}>{person.name} {person.number}</p>
       )}
     </div>
   )
