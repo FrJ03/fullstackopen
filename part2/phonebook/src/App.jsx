@@ -60,10 +60,15 @@ const App = () => {
       id: persons[persons.length - 1].id + 1
     }
     if(personExists(newPerson.name, persons) === false){
-      const newPersons = persons.concat(newPerson)
-      setPersons(newPersons)
-      setFilter('')
-      setPersonsFiltered(newPersons)
+      axios
+        .post('http://localhost:3001/persons', newPerson)
+        .then(response => {
+          console.log(response)
+          const newPersons = persons.concat(newPerson)
+          setPersons(newPersons)
+          setFilter('')
+          setPersonsFiltered(newPersons)
+        })
     }
     else{
       alert(`${newPerson.name} is already added to phonebook`)
