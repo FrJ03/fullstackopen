@@ -31,6 +31,15 @@ const App = () => {
     return ret
   }
 
+  const personFind = (name, personsList) => {
+    for(let i = 0 ; i < personsList.length; i++){
+      if(personsList[i].name === name){
+        return i
+      }
+    }
+    return -1
+  }
+
   const filterPerson = (filterStr) => {
     if(filterStr === ''){
       setPersonsFiltered(persons)
@@ -54,12 +63,12 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    const newPerson = {
-      name: newName,
-      number: newNumber,
-      id: `${parseInt(persons[persons.length - 1].id) + 1}`
-    }
-    if(personExists(newPerson.name, persons) === false){
+    if(personExists(newName, persons) === false){
+      const newPerson = {
+        name: newName,
+        number: newNumber,
+        id: `${parseInt(persons[persons.length - 1].id) + 1}`
+      }
       personService.create(newPerson)
       const newPersons = persons.concat(newPerson)
       setPersons(newPersons)
@@ -67,7 +76,27 @@ const App = () => {
       setPersonsFiltered(newPersons)
     }
     else{
-      alert(`${newPerson.name} is already added to phonebook`)
+      if(window.confirm(`${newName} is already added to phonebook, repalce the old number with a new one?`)){
+        const pos = personFind(newName, persons)
+        
+        const newPerson = {
+          name: newName,
+          number: newNumber,
+          id: `${persons[pos].id}`
+        }
+        personService.update(newPerson)
+
+        const posFiltered = personFind(newPerson.name, personsFiltered)
+
+        const newPersonsList = [...persons]
+        newPersonsList[pos].number = newPerson.number
+        setPersons(newPersonsList)
+        if(posFiltered !== -1){
+          const newPersonsFilteredList = [...personsFiltered]
+          newPersonsFilteredList[pos].number = newPerson.number
+          setPersonsFiltered(newPersonsFilteredList)
+        }
+      }
     }
     setNewName('')
     setNewNumber('')
