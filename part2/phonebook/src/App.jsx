@@ -73,6 +73,17 @@ const App = () => {
     setNewNumber('')
   }
 
+  const deleteHandler = (event, person) => {
+    event.preventDefault()
+    if(window.confirm(`Delete ${person.name} ?`)){
+      personService.deletePerson(person)
+      const newPersonsList = persons.filter(p => p.name !== person.name)
+      const newPersonsFilteredList = personsFiltered.filter(p => p.name !== person.name)
+      setPersons(newPersonsList)
+      setPersonsFiltered(newPersonsFilteredList)
+    }
+  }
+
   const personForm = {
     elements: [
       {
@@ -99,7 +110,7 @@ const App = () => {
       <h2>add a new</h2>
       <PersonForm form={personForm}/>
       <h2>Numbers</h2>
-      <Persons persons={personsFiltered}/>
+      <Persons persons={personsFiltered} onClick={deleteHandler}/>
     </div>
   )
 }

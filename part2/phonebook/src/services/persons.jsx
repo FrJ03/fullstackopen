@@ -4,9 +4,7 @@ const baseUrl = 'http://localhost:3001/persons'
 
 const getAll = () => {
   const request = axios.get(baseUrl)
-  const response = request.then(response => response.data)
-  console.log(response)
-  return response
+  return request.then(response => response.data)
 }
 
 const create = newPerson => {
@@ -14,4 +12,11 @@ const create = newPerson => {
   return request.then(response => response.data)
 }
 
-export default { getAll, create }
+const deletePerson = person => {
+    const personUrl = `${baseUrl}/${person.id}`
+    return axios
+            .delete(personUrl)
+            .then(response => response.data)
+}
+
+export default { getAll, create, deletePerson }
