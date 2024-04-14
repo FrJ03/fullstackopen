@@ -3,6 +3,7 @@ import Filter from './Filter'
 import PersonForm from './PersonForm'
 import Persons from './Persons'
 import personService from './services/persons'
+import Notification from './Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -20,6 +21,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [notification, setNotification] = useState(null)
 
   const personExists = (name, personsList) => {
     let ret = false
@@ -74,6 +76,7 @@ const App = () => {
       setPersons(newPersons)
       setFilter('')
       setPersonsFiltered(newPersons)
+      setNotification(`Added ${newPerson.name}`)
     }
     else{
       if(window.confirm(`${newName} is already added to phonebook, repalce the old number with a new one?`)){
@@ -96,10 +99,14 @@ const App = () => {
           newPersonsFilteredList[pos].number = newPerson.number
           setPersonsFiltered(newPersonsFilteredList)
         }
+        setNotification(`Added ${newPerson.name}`)
       }
     }
     setNewName('')
     setNewNumber('')
+    setTimeout(()=>{
+      setNotification(null)
+    }, 5000)
   }
 
   const deleteHandler = (event, person) => {
@@ -135,6 +142,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification}/>
       <Filter filter={filter} handler={handlerFilter}/>
       <h2>add a new</h2>
       <PersonForm form={personForm}/>
