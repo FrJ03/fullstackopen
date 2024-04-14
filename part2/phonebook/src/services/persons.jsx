@@ -26,4 +26,10 @@ const update = person => {
             .then(response => response.data)
 }
 
-export default { getAll, create, deletePerson, update }
+const get = name => {
+  const personUrl = `${baseUrl}?name=${name}`
+  const request = axios.get(personUrl)
+  return request.then(response => response.data[0])
+}
+
+export default { get, getAll, create, deletePerson, update }

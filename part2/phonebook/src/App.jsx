@@ -21,7 +21,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
-  const [notification, setNotification] = useState(null)
+  const [notification, setNotification] = useState({message: null, type: ''})
 
   const personExists = (name, personsList) => {
     let ret = false
@@ -65,9 +65,10 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    if(personExists(newName, persons) === false){
+    const name = newName
+    if(personExists(name, persons) === false){
       const newPerson = {
-        name: newName,
+        name: name,
         number: newNumber,
         id: `${parseInt(persons[persons.length - 1].id) + 1}`
       }
@@ -76,36 +77,43 @@ const App = () => {
       setPersons(newPersons)
       setFilter('')
       setPersonsFiltered(newPersons)
-      setNotification(`Added ${newPerson.name}`)
+      setNotification({message: `Added ${newPerson.name}`, type: "success"})
     }
     else{
-      if(window.confirm(`${newName} is already added to phonebook, repalce the old number with a new one?`)){
-        const pos = personFind(newName, persons)
+      if(window.confirm(`${name} is already added to phonebook, repalce the old number with a new one?`)){
         
-        const newPerson = {
-          name: newName,
-          number: newNumber,
-          id: `${persons[pos].id}`
-        }
-        personService.update(newPerson)
+        personService
+          .get(name)
+          .then(per => {
+            const newPerson = {
+              name: name,
+              number: newNumber,
+              id: `${per.id}`
+            }
+            personService.update(newPerson)
 
-        const posFiltered = personFind(newPerson.name, personsFiltered)
+            const pos = personFind(name, persons)
+            const posFiltered = personFind(name, personsFiltered)
 
-        const newPersonsList = [...persons]
-        newPersonsList[pos].number = newPerson.number
-        setPersons(newPersonsList)
-        if(posFiltered !== -1){
-          const newPersonsFilteredList = [...personsFiltered]
-          newPersonsFilteredList[pos].number = newPerson.number
-          setPersonsFiltered(newPersonsFilteredList)
-        }
-        setNotification(`Added ${newPerson.name}`)
+            const newPersonsList = [...persons]
+            newPersonsList[pos].number = newPerson.number
+            setPersons(newPersonsList)
+            if(posFiltered !== -1){
+              const newPersonsFilteredList = [...personsFiltered]
+              newPersonsFilteredList[pos].number = newPerson.number
+              setPersonsFiltered(newPersonsFilteredList)
+            }
+            setNotification({message: `Added ${newPerson.name}`, type: "success"})
+        })
+        .catch(erro => {
+          setNotification({message: `Information about ${name} has already been removed from server`, type: "error"})
+        })
       }
     }
     setNewName('')
     setNewNumber('')
     setTimeout(()=>{
-      setNotification(null)
+      setNotification({message: null})
     }, 5000)
   }
 
@@ -142,7 +150,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notification}/>
+      <Notification message={notification.message} type={notification.type}/>
       <Filter filter={filter} handler={handlerFilter}/>
       <h2>add a new</h2>
       <PersonForm form={personForm}/>
