@@ -1,9 +1,12 @@
-import Message from './Message'
+import CountryListElement from "./CountryListElement"
 
-const CountryList = ({countries}) => {
+
+const CountryList = ({countries, onClick}) => {
     return (
         <>
-            {countries.map((country, key) => <Message key={country.name.common +  key} message={country.name.common}/>)}
+            {countries.map((country, key) => 
+                        <CountryListElement key={country.name.common +  key} element={country.name.common} onClick={onClick}/>               
+                )}
         </>
     )
 }
