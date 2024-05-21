@@ -1,3 +1,6 @@
+const lCollections = require('lodash/collection')
+const lObject = require('lodash/object')
+
 const dummy = (blogs) => {
     return 1
 }
@@ -10,7 +13,7 @@ const totalLikes = (blogs) => {
 
 const favoriteBlog = (blogs) => {
     if(blogs.length === 0){
-        return null
+        return {}
     }
     else{
         let sortedBlogs = [...blogs]
@@ -25,8 +28,29 @@ const favoriteBlog = (blogs) => {
     }
 }
 
+const mostBlogs = (blogs) => {
+    if(blogs.length === 0){
+        return {}
+    }
+    else{
+        const  occurrences = lCollections.countBy(blogs, 'author')
+        let occurrencesList = [] 
+        lObject.forIn(occurrences, (value, key) => {
+            occurrencesList.push({
+                author: key,
+                blogs: value
+            })
+        })
+        occurrencesList.sort((a, b) => {
+            return b.blogs - a.blogs
+        })
+        return occurrencesList[0]
+    }
+}
+
 module.exports = {
     dummy,
     totalLikes,
-    favoriteBlog
+    favoriteBlog,
+    mostBlogs
 }
