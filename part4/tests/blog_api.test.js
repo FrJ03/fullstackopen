@@ -39,6 +39,12 @@ test('blogs size', async () => {
     const response = await api.get('/api/blogs')
     assert.strictEqual(response.body.length, initialBlogs.length)
 })
+test('blogs id', async () => {
+    const response = await api.get('/api/blogs')
+
+    assert.strictEqual(Object.hasOwn(response.body[0], 'id'), true)
+    assert.strictEqual(Object.hasOwn(response.body[0], '_id'), false)
+})
 
 after(async () => {
   await mongoose.connection.close()
@@ -46,10 +52,9 @@ after(async () => {
 
 beforeEach(async () => {
     await Blog.deleteMany({})
-    let blogObject = new Blog(initialBlogs[0])
-    await blogObject.save()
-    blogObject = new Blog(initialBlogs[1])
-    await blogObject.save()
-    blogObject = new Blog(initialBlogs[2])
-    await blogObject.save()
+  
+    for (let blog of initialBlogs) {
+      let blogObject = new Blog(blog)
+      await blogObject.save()
+    }
 })
