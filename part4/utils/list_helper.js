@@ -48,9 +48,30 @@ const mostBlogs = (blogs) => {
     }
 }
 
+const mostLikes = (blogs) => {
+    if(blogs.length === 0){
+        return {}
+    }
+    else{
+        const occurrences = lCollections.groupBy(blogs, 'author')
+        let occurrencesList = [] 
+        lObject.forIn(occurrences, (value, author) => {
+            occurrencesList.push({
+                author: author,
+                likes: value.reduce((sum, blog) => sum + blog.likes, 0)
+            })
+        })
+        occurrencesList.sort((a, b) => {
+            return b.likes - a.likes
+        })
+        return occurrencesList[0]
+    }
+}
+
 module.exports = {
     dummy,
     totalLikes,
     favoriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
 }
