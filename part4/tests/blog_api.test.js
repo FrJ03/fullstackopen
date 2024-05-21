@@ -45,6 +45,18 @@ test('blogs id', async () => {
     assert.strictEqual(Object.hasOwn(response.body[0], 'id'), true)
     assert.strictEqual(Object.hasOwn(response.body[0], '_id'), false)
 })
+test('Adding a new blog', async () => {
+    const newBlog = new Blog({
+        title: 'Apple Secret v2',
+        author: 'Steve Jobs',
+        url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
+        likes: 13
+    })
+    await newBlog.save()
+
+    const response = await api.get('/api/blogs')
+    assert.strictEqual(response.body.length, initialBlogs.length + 1)
+})
 
 after(async () => {
   await mongoose.connection.close()
