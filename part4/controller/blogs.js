@@ -34,5 +34,16 @@ blogsRouter.delete('/:id', (request, response) => {
             response.sendStatus(404)
         })
 })
+blogsRouter.put('/:id', (request, response) => {
+    const blogId = request.params.id
+    Blog
+        .findOneAndUpdate({_id: blogId}, request.body)
+        .then(result => {
+            response.status(200).json(result)
+        })
+        .catch(() => {
+            response.sendStatus(404)
+        })
+})
 
 module.exports = blogsRouter
