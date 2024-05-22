@@ -1,10 +1,11 @@
 const usersRouter = require('express').Router()
+const user = require('../models/user')
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 
 usersRouter.get('/', (request, response) => {
     User
-        .find({})
+        .find({}, ['id', 'username', 'blogs', 'name'])
         .populate('blogs', {url: 1, author: 1, title: 1})
         .then(users => {
             response.json(users)

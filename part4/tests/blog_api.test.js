@@ -153,18 +153,37 @@ describe('Blog API Tests', () => {
     })
     describe('deleting blogs tests', () => {
         test('Deleting the first blog', async () => {
-            const response1 = await api.get('/api/blogs')
+            const blogToDelete = {
+                title: 'Apple Secret v2',
+                author: 'Steve Jobs',
+                url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf'
+            }
+            const b = await api
+                .post('/api/blogs')
+                .send(blogToDelete)
+                .set({authorization: token})
+
             await api
-                .delete(`/api/blogs/${response1.body[0].id}`)
+                .delete(`/api/blogs/${b.body.id}`)
+                .set({authorization: token})
                 .expect(200)
             
-            const response2 = await api.get('/api/blogs')
-            assert.strictEqual(response2.body.length, response1.body.length - 1)
+            const response = await api.get('/api/blogs')
+            assert.strictEqual(response.body.length, initialBlogs.length)
         })
         test('Deleting a blog that not exists', async () => {
             await api
-                .delete(`/api/blogs/0`)
+                .delete(`/api/blogs/ffffffffffffffffffffffff`)
+                .set({authorization: token})
                 .expect(404)
+        })
+        test('Deleting an other user\'s blog', async () => {
+            const response = await api.get('/api/blogs')
+
+            await api
+                .delete(`/api/blogs/${response.body[0].id}`)
+                .set({authorization: token})
+                .expect(401)
         })
     })
     describe('Update blogs tests', () => {

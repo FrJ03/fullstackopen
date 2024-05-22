@@ -37,9 +37,21 @@ blogsRouter.post('/', async (request, response) => {
         response.sendStatus(400)
     }
 })
-blogsRouter.delete('/:id', (request, response) => {
+blogsRouter.delete('/:id', async (request, response) => {
     const blogId = request.params.id
-    Blog
+
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    if (!decodedToken.id) {
+        return response.status(401).json({ error: 'token invalid' })
+    }
+
+    const blog = await Blog.findOne({_id: blogId})
+
+    if(blog === null){
+        response.sendStatus(404)
+    }
+    else if(blog.user && decodedToken.id === String(blog.user)){
+        Blog
         .deleteOne({_id: blogId})
         .then(result => {
             response.sendStatus(200)
@@ -47,6 +59,10 @@ blogsRouter.delete('/:id', (request, response) => {
         .catch(() => {
             response.sendStatus(404)
         })
+    }
+    else{
+        response.sendStatus(401)
+    }
 })
 blogsRouter.put('/:id', (request, response) => {
     const blogId = request.params.id
