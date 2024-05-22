@@ -99,7 +99,7 @@ describe('Blog API Tests', () => {
             const response = await api.get('/api/blogs')
             assert.strictEqual(Object.hasOwn(response.body[response.body.length - 1], 'user'), true)
             assert.strictEqual(Object.hasOwn(response.body[response.body.length - 1].user, 'username'), true)
-        })/*
+        })
         test('Adding a new blog without tittle', async () => {
             const newBlog = {
                 author: 'Steve Jobs',
@@ -121,8 +121,8 @@ describe('Blog API Tests', () => {
                 .post('/api/blogs')
                 .send(newBlog)
                 .expect(400)
-        })*/
-    })/*
+        })
+    })
     describe('deleting blogs tests', () => {
         test('Deleting the first blog', async () => {
             const response1 = await api.get('/api/blogs')
@@ -156,7 +156,7 @@ describe('Blog API Tests', () => {
                 .send({likes: 1})
                 .expect(404)
         })
-    })*/
+    })
 })
 after(async () => {
     await mongoose.connection.close()
