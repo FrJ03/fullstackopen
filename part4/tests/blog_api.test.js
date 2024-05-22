@@ -68,6 +68,28 @@ test('Adding a new blog without likes property', async () => {
     const response = await api.get('/api/blogs')
     assert.strictEqual(response.body[response.body.length - 1].likes, 0)
 })
+test('Adding a new blog without tittle', async () => {
+    const newBlog = {
+        author: 'Steve Jobs',
+        url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
+        likes: 13
+    }
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+})
+test('Adding a new blog without url', async () => {
+    const newBlog = {
+        title: 'Apple Secret v2',
+        author: 'Steve Jobs',
+        likes: 13
+    }
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+})
 
 after(async () => {
   await mongoose.connection.close()
