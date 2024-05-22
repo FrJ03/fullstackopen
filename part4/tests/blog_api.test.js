@@ -57,6 +57,17 @@ test('Adding a new blog', async () => {
     const response = await api.get('/api/blogs')
     assert.strictEqual(response.body.length, initialBlogs.length + 1)
 })
+test('Adding a new blog without likes property', async () => {
+    const newBlog = new Blog({
+        title: 'Apple Secret v2',
+        author: 'Steve Jobs',
+        url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf'
+    })
+    await newBlog.save()
+
+    const response = await api.get('/api/blogs')
+    assert.strictEqual(response.body[response.body.length - 1].likes, 0)
+})
 
 after(async () => {
   await mongoose.connection.close()
