@@ -11,19 +11,29 @@ usersRouter.get('/', (request, response) => {
 })
 
 usersRouter.post('/', async (request, response) => {
-    const { username, name, password } = request.body
+    if(
+        Object.hasOwn(request.body, 'username') &&
+        request.body.username.length >= 3 &&
+        Object.hasOwn(request.body, 'password') && 
+        request.body.password.length >= 3
+    ){
+        const { username, name, password } = request.body
 
-    const saltRounds = 10
-    const passwordHash = await bcrypt.hash(password, saltRounds)
+        const saltRounds = 10
+        const passwordHash = await bcrypt.hash(password, saltRounds)
 
-    const user = new User({
-        username: username,
-        password: passwordHash,
-        name: name
-    })
+        const user = new User({
+            username: username,
+            password: passwordHash,
+            name: name
+        })
 
-    const savedUser = await user.save()
-    response.status(201).json(savedUser)
+        const savedUser = await user.save()
+        response.status(201).json(savedUser)
+    }
+    else{
+        response.sendStatus(400)
+    }
 })
 
 module.exports = usersRouter
