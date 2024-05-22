@@ -1,9 +1,10 @@
-const { test, describe, after, beforeEach } = require('node:test')
+const { test, describe, after, beforeEach, before } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const { send } = require('node:process')
 
 const api = supertest(app)
@@ -28,14 +29,36 @@ const initialBlogs = [
         likes: 15
     },
 ]
+
+//create an log user
+const testUser = {
+    username: 'test',
+    password: 'test',
+    username: 'test'
+}
+
+let testUserId
+let token
+
 describe('Blog API Tests', () => {
+    before(async () => {
+        const user = await api
+            .post('/api/users')
+            .send(testUser)
+        testUserId = user.body.id
+        const auth = await api
+            .post('/api/login')
+            .send(testUser)
+        token = `Bearer ${auth.body.token}`
+    })
     beforeEach(async () => {
         await Blog.deleteMany({})
     
         for (let blog of initialBlogs) {
-        let blogObject = new Blog(blog)
-        await blogObject.save()
+            let blogObject = new Blog(blog)
+            await blogObject.save()
         }
+        
     })
     describe('Get all blogs tests', () => {
         test('blogs are returned as json', async () => {
@@ -66,6 +89,7 @@ describe('Blog API Tests', () => {
             await api
                 .post('/api/blogs')
                 .send(newBlog)
+                .set({authorization: token})
                 .expect(201)
 
             const response = await api.get('/api/blogs')
@@ -80,6 +104,7 @@ describe('Blog API Tests', () => {
             await api
                 .post('/api/blogs')
                 .send(newBlog)
+                .set({authorization: token})
                 .expect(201)
 
             const response = await api.get('/api/blogs')
@@ -94,6 +119,7 @@ describe('Blog API Tests', () => {
             await api
                 .post('/api/blogs')
                 .send(newBlog)
+                .set({authorization: token})
                 .expect(201)
 
             const response = await api.get('/api/blogs')
@@ -109,6 +135,7 @@ describe('Blog API Tests', () => {
             await api
                 .post('/api/blogs')
                 .send(newBlog)
+                .set({authorization: token})
                 .expect(400)
         })
         test('Adding a new blog without url', async () => {
@@ -120,6 +147,7 @@ describe('Blog API Tests', () => {
             await api
                 .post('/api/blogs')
                 .send(newBlog)
+                .set({authorization: token})
                 .expect(400)
         })
     })
@@ -159,5 +187,6 @@ describe('Blog API Tests', () => {
     })
 })
 after(async () => {
+    User.deleteOne({_id: testUserId})
     await mongoose.connection.close()
 })
