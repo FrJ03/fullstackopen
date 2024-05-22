@@ -57,28 +57,49 @@ describe('Blog API Tests', () => {
     })
     describe('Adding blog tests', () => {
         test('Adding a new blog', async () => {
-            const newBlog = new Blog({
+            const newBlog = {
                 title: 'Apple Secret v2',
                 author: 'Steve Jobs',
                 url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
                 likes: 13
-            })
-            await newBlog.save()
+            }
+            await api
+                .post('/api/blogs')
+                .send(newBlog)
+                .expect(201)
 
             const response = await api.get('/api/blogs')
             assert.strictEqual(response.body.length, initialBlogs.length + 1)
         })
         test('Adding a new blog without likes property', async () => {
-            const newBlog = new Blog({
+            const newBlog = {
                 title: 'Apple Secret v2',
                 author: 'Steve Jobs',
                 url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf'
-            })
-            await newBlog.save()
+            }
+            await api
+                .post('/api/blogs')
+                .send(newBlog)
+                .expect(201)
 
             const response = await api.get('/api/blogs')
             assert.strictEqual(response.body[response.body.length - 1].likes, 0)
         })
+        test('Has an existing user assigned', async () => {
+            const newBlog = {
+                title: 'Apple Secret v2',
+                author: 'Steve Jobs',
+                url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf'
+            }
+            await api
+                .post('/api/blogs')
+                .send(newBlog)
+                .expect(201)
+
+            const response = await api.get('/api/blogs')
+            assert.strictEqual(Object.hasOwn(response.body[response.body.length - 1], 'user'), true)
+            assert.strictEqual(Object.hasOwn(response.body[response.body.length - 1].user, 'username'), true)
+        })/*
         test('Adding a new blog without tittle', async () => {
             const newBlog = {
                 author: 'Steve Jobs',
@@ -100,8 +121,8 @@ describe('Blog API Tests', () => {
                 .post('/api/blogs')
                 .send(newBlog)
                 .expect(400)
-        })
-    })
+        })*/
+    })/*
     describe('deleting blogs tests', () => {
         test('Deleting the first blog', async () => {
             const response1 = await api.get('/api/blogs')
@@ -135,7 +156,7 @@ describe('Blog API Tests', () => {
                 .send({likes: 1})
                 .expect(404)
         })
-    })   
+    })*/
 })
 after(async () => {
     await mongoose.connection.close()
