@@ -150,6 +150,17 @@ describe('Blog API Tests', () => {
                 .set({authorization: token})
                 .expect(400)
         })
+        test('Adding a new blog without login', async () => {
+            const newBlog = {
+                title: 'Apple Secret v2',
+                author: 'Steve Jobs',
+                likes: 13
+            }
+            await api
+                .post('/api/blogs')
+                .send(newBlog)
+                .expect(401)
+        })
     })
     describe('deleting blogs tests', () => {
         test('Deleting the first blog', async () => {
