@@ -21,7 +21,7 @@ const Blog = ({ blog }) => {
     event.preventDefault()
     blog.likes += 1
     setLikes(blog.likes)
-    blogService.updateLike(blog)
+    blogService.update(blog)
   }
 
   return (
