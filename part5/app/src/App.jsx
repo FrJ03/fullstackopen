@@ -12,9 +12,6 @@ const App = () => {
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [newBlogTitle, setNewBlogTitle] = useState('')
-  const [newBlogAuthor, setNewBlogAuthor] = useState('')
-  const [newBlogUrl, setNewBlogUrl] = useState('')
   const [notification, setNotification] = useState({message: null, type: ''})
   const [visible, setVisible] = useState(false)
 
@@ -67,19 +64,15 @@ const App = () => {
     setUser(null)
   }
 
-  const handleCreateBlog = async (event) => {
+  const handleCreateBlog = async (event,blog) => {
     event.preventDefault()
     try {
-      const response = await blogService.create({
-        author: newBlogAuthor,
-        title: newBlogTitle,
-        url: newBlogUrl
-      })
+      const response = await blogService.create(blog)
       const newBlogs = [...blogs]
       newBlogs.push(response)
       setBlogs(newBlogs)
       setNotification({
-        message: `A new blog ${newBlogTitle} by ${newBlogAuthor} added`,
+        message: `A new blog ${blog.title} by ${blog.author} added`,
         type: 'success'
       })
       setTimeout(() => {
@@ -87,18 +80,11 @@ const App = () => {
           message: null
         })
       }, 5000)
-      setNewBlogAuthor('')
-      setNewBlogTitle('')
-      setNewBlogUrl('')
       setVisible(false)
     } catch (exception) {
       console.log(exception)
     }
   }
-
-  const handleChangeBlogTitle = (target) => setNewBlogTitle(target.value)
-  const handleChangeBlogAuthor = (target) => setNewBlogAuthor(target.value)
-  const handleChangeBlogUrl= (target) => setNewBlogUrl(target.value)
 
   const blogView = () => (
     <>
@@ -111,13 +97,7 @@ const App = () => {
         setVisible={(newState) => setVisible(newState)}
       >
         <BlogForm
-          title={newBlogTitle}
-          author={newBlogAuthor}
-          url={newBlogUrl}
           handleCreateBlog={handleCreateBlog}
-          handleChangeBlogTitle={handleChangeBlogTitle}
-          handleChangeBlogAuthor={handleChangeBlogAuthor}
-          handleChangeBlogUrl={handleChangeBlogUrl}
         />
       </Togglable>
       {blogs.map(blog =>
