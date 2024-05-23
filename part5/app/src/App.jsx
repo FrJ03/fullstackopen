@@ -86,6 +86,15 @@ const App = () => {
     }
   }
 
+  const findBlog = (blogId) => {
+    blogs.forEach((blog, i) => {
+      if(String(blogId) === String(blog.id)){
+        return i
+      }
+    })
+    return -1
+  }
+
   const blogView = () => (
     <>
       <p>
@@ -101,7 +110,7 @@ const App = () => {
         />
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog}/>
       )}
     </> 
   )

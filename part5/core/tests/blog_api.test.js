@@ -217,6 +217,6 @@ describe('Blog API Tests', () => {
     })
 })
 after(async () => {
-    User.deleteOne({_id: testUserId})
+    await User.deleteOne({_id: testUserId})
     await mongoose.connection.close()
 })
