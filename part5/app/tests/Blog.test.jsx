@@ -49,3 +49,32 @@ test('Renders blog url and likes author', async () => {
   expect(container).toHaveTextContent('url')
   expect(container).toHaveTextContent('1')
 })
+
+test('Renders blog like button', async () => {
+  const blog = {
+    title: 'title',
+    author: 'author',
+    id: 'id',
+    likes: 1,
+    url: 'url',
+    user: {
+      id: 'id',
+      username: 'username',
+      name: 'name'
+    }
+  }
+  const deleteBlog = () => 1
+  const sortBlogs = () => 1
+
+  const { container } = render(<Blog blog={blog} deleteBlog={deleteBlog} sortBlogs={sortBlogs}/>)
+
+  const user = userEvent.setup()
+  const showButton = screen.getByText('show')
+  await user.click(showButton)
+
+  const likeButton = screen.getByText('like')
+  await user.click(likeButton)
+  await user.click(likeButton)
+
+  expect(container).toHaveTextContent('3')
+})
