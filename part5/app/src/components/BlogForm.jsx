@@ -27,6 +27,7 @@ const BlogForm = (props) => {
         <label form='title-input'>title: </label>
         <input
           id='title-input'
+          className='title-input'
           value={title}
           onChange={({ target }) => setTitle(target.value)}
         />
@@ -35,6 +36,7 @@ const BlogForm = (props) => {
         <label form='author-input'>author: </label>
         <input
           id='author-input'
+          className='author-input'
           value={author}
           onChange={({ target }) => setAuthor(target.value)}
         />
@@ -43,6 +45,7 @@ const BlogForm = (props) => {
         <label form='url-input'>url: </label>
         <input
           id='url-input'
+          className='url-input'
           value={url}
           onChange={({ target }) => setUrl(target.value)}
         />
