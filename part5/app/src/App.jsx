@@ -89,9 +89,13 @@ const App = () => {
     }
   }
 
-  const sortBlogList = () => {
-    console.log(blogs)
-    setBlogs( sortBlogs(blogs) )}
+  const sortBlogList = () => setBlogs( sortBlogs(blogs) )
+
+  const deleteBlog = (blog) => {
+    let newBlogs = [...blogs]
+    newBlogs = newBlogs.filter(b => String(blog.id) != String(b.id))
+    setBlogs(newBlogs)
+  }
 
   const blogView = () => (
     <>
@@ -108,7 +112,7 @@ const App = () => {
         />
       </Togglable>
       {blogs.map((blog) =>
-        <Blog key={blog.id} blog={blog} sortBlogs={sortBlogList}/>
+        <Blog key={blog.id} blog={blog} sortBlogs={sortBlogList} deleteBlog={deleteBlog}/>
       )}
     </> 
   )
