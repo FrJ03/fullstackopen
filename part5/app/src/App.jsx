@@ -3,6 +3,9 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
+import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -13,6 +16,7 @@ const App = () => {
   const [newBlogAuthor, setNewBlogAuthor] = useState('')
   const [newBlogUrl, setNewBlogUrl] = useState('')
   const [notification, setNotification] = useState({message: null, type: ''})
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -38,14 +42,14 @@ const App = () => {
       window.localStorage.setItem(
         'loggedUser', JSON.stringify(user)
       )
-      noteService.setToken(user.token)
+      blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
     } catch (exception) {
       setNotification({
         message: `wrong username or password`,
-        type: 'success'
+        type: 'error'
       })
       setTimeout(() => {
         setNotification({
@@ -54,6 +58,9 @@ const App = () => {
       }, 5000)
     }
   }
+
+  const handleChangeUsername = (target) => setUsername(target.value)
+  const handleChangePassword= (target) => setPassword(target.value)
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser')
@@ -83,71 +90,36 @@ const App = () => {
       setNewBlogAuthor('')
       setNewBlogTitle('')
       setNewBlogUrl('')
+      setVisible(false)
     } catch (exception) {
       console.log(exception)
     }
   }
 
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-          <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        password
-          <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>      
-  )
-
-  const blogForm = () => (
-    <form onSubmit={handleCreateBlog}>
-      <div>
-        <label form='title-input'>title: </label>
-        <input
-          id='title-input'
-          value={newBlogTitle}
-          onChange={({ target }) => setNewBlogTitle(target.value)}
-        />
-      </div>
-      <div>
-        <label form='author-input'>author: </label>
-        <input
-          id='author-input'
-          value={newBlogAuthor}
-          onChange={({ target }) => setNewBlogAuthor(target.value)}
-        />
-      </div>
-      <div>
-        <label form='url-input'>url: </label>
-        <input
-          id='url-input'
-          value={newBlogUrl}
-          onChange={({ target }) => setNewBlogUrl(target.value)}
-        />
-      </div>
-      <button type="submit">create</button>
-    </form>
-  )
+  const handleChangeBlogTitle = (target) => setNewBlogTitle(target.value)
+  const handleChangeBlogAuthor = (target) => setNewBlogAuthor(target.value)
+  const handleChangeBlogUrl= (target) => setNewBlogUrl(target.value)
 
   const blogView = () => (
     <>
       <p>
         {`${user.name} logged in`}<button onClick={handleLogout}>logout</button>
       </p>
-      {blogForm()}
+      <Togglable
+        buttonLabel={'create new blog'}
+        visible={visible}
+        setVisible={(newState) => setVisible(newState)}
+      >
+        <BlogForm
+          title={newBlogTitle}
+          author={newBlogAuthor}
+          url={newBlogUrl}
+          handleCreateBlog={handleCreateBlog}
+          handleChangeBlogTitle={handleChangeBlogTitle}
+          handleChangeBlogAuthor={handleChangeBlogAuthor}
+          handleChangeBlogUrl={handleChangeBlogUrl}
+        />
+      </Togglable>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
@@ -160,7 +132,13 @@ const App = () => {
       <Notification message={notification.message} type={notification.type}/>
       {
         user === null ?
-          loginForm()
+          <LoginForm 
+            username={username}
+            password={password}
+            handleLogin={handleLogin}
+            handleChangeUsername={handleChangeUsername}
+            handleChangePassword={handleChangePassword}  
+          />
         :
           blogView()
           
