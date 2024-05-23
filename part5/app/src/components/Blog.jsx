@@ -1,7 +1,7 @@
 import { useState } from "react"
 import blogService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, sortBlogs }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -22,6 +22,7 @@ const Blog = ({ blog }) => {
     blog.likes += 1
     setLikes(blog.likes)
     blogService.update(blog)
+    sortBlogs()
   }
 
   return (

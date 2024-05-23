@@ -15,9 +15,12 @@ const App = () => {
   const [notification, setNotification] = useState({message: null, type: ''})
   const [visible, setVisible] = useState(false)
 
+  const sortBlogs = (blogList) =>  blogList.sort((a, b) => b.likes - a.likes)
+
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+    blogService.getAll().then(blogs =>{
+      setBlogs( sortBlogs(blogs) )
+    }
     )  
   }, [])
 
@@ -86,14 +89,9 @@ const App = () => {
     }
   }
 
-  const findBlog = (blogId) => {
-    blogs.forEach((blog, i) => {
-      if(String(blogId) === String(blog.id)){
-        return i
-      }
-    })
-    return -1
-  }
+  const sortBlogList = () => {
+    console.log(blogs)
+    setBlogs( sortBlogs(blogs) )}
 
   const blogView = () => (
     <>
@@ -109,8 +107,8 @@ const App = () => {
           handleCreateBlog={handleCreateBlog}
         />
       </Togglable>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog}/>
+      {blogs.map((blog) =>
+        <Blog key={blog.id} blog={blog} sortBlogs={sortBlogList}/>
       )}
     </> 
   )
