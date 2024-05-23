@@ -1,28 +1,27 @@
-import { useState } from "react"
+import { useState } from 'react'
 import blogService from '../services/blogs'
 
 const BlogForm = (props) => {
-    
-    const [title, setTitle] = useState('')
-    const [author, setAuthor] = useState('')
-    const [url, setUrl] = useState('')
-    const handleCreateBlog = async (event) => {
-        event.preventDefault()
-        props.handleCreateBlog(event, {
-            author: title,
-            title: author,
-            url: url
-        })
-        try {
-          setAuthor('')
-          setTitle('')
-          setUrl('')
-        } catch (exception) {
-          console.log(exception)
-        }
-      }
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+  const handleCreateBlog = async (event) => {
+    event.preventDefault()
+    props.handleCreateBlog(event, {
+      author: title,
+      title: author,
+      url: url
+    })
+    try {
+      setAuthor('')
+      setTitle('')
+      setUrl('')
+    } catch (exception) {
+      console.log(exception)
+    }
+  }
 
-    return (
+  return (
     <form onSubmit={handleCreateBlog}>
       <div>
         <label form='title-input'>title: </label>
@@ -50,6 +49,7 @@ const BlogForm = (props) => {
       </div>
       <button type="submit">create</button>
     </form>
-  )}
+  )
+}
 
-  export default BlogForm
+export default BlogForm

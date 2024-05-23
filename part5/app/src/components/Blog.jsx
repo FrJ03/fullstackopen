@@ -1,5 +1,6 @@
-import { useState } from "react"
+import { useState } from 'react'
 import blogService from '../services/blogs'
+import PropTypes from 'prop-types'
 
 const Blog = ({ blog, sortBlogs, deleteBlog }) => {
   const blogStyle = {
@@ -29,7 +30,7 @@ const Blog = ({ blog, sortBlogs, deleteBlog }) => {
     event.preventDefault()
     if(window.confirm(`Remove blog ${blog.title} by ${blog.author}`)){
       const status = await blogService.deleteBlog(blog)
-      if(status == 200){
+      if(status === 200){
         deleteBlog(blog)
       }
     }
@@ -53,7 +54,7 @@ const Blog = ({ blog, sortBlogs, deleteBlog }) => {
         </div>
         <div>
           {
-            Object.hasOwn(blog, 'user') ? 
+            Object.hasOwn(blog, 'user') ?
               blog.user.username :
               'Unknown'
           }
@@ -64,6 +65,12 @@ const Blog = ({ blog, sortBlogs, deleteBlog }) => {
       </div>
     </div>
   )
+}
+
+Blog.propTypes = {
+  sortBlogs: PropTypes.func.isRequired,
+  deleteBlog: PropTypes.func.isRequired,
+  blog: PropTypes.object.isRequired
 }
 
 export default Blog

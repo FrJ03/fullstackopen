@@ -9,19 +9,18 @@ import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('') 
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState({message: null, type: ''})
+  const [notification, setNotification] = useState({ message: null, type: '' })
   const [visible, setVisible] = useState(false)
 
   const sortBlogs = (blogList) =>  blogList.sort((a, b) => b.likes - a.likes)
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>{
+    blogService.getAll().then(blogs => {
       setBlogs( sortBlogs(blogs) )
-    }
-    )  
+    })
   }, [])
 
   useEffect(() => {
@@ -48,7 +47,7 @@ const App = () => {
       setPassword('')
     } catch (exception) {
       setNotification({
-        message: `wrong username or password`,
+        message: 'wrong username or password',
         type: 'error'
       })
       setTimeout(() => {
@@ -93,7 +92,7 @@ const App = () => {
 
   const deleteBlog = (blog) => {
     let newBlogs = [...blogs]
-    newBlogs = newBlogs.filter(b => String(blog.id) != String(b.id))
+    newBlogs = newBlogs.filter(b => String(blog.id) !== String(b.id))
     setBlogs(newBlogs)
   }
 
@@ -114,7 +113,7 @@ const App = () => {
       {blogs.map((blog) =>
         <Blog key={blog.id} blog={blog} sortBlogs={sortBlogList} deleteBlog={deleteBlog}/>
       )}
-    </> 
+    </>
   )
 
   return (
@@ -123,16 +122,15 @@ const App = () => {
       <Notification message={notification.message} type={notification.type}/>
       {
         user === null ?
-          <LoginForm 
+          <LoginForm
             username={username}
             password={password}
             handleLogin={handleLogin}
             handleChangeUsername={handleChangeUsername}
-            handleChangePassword={handleChangePassword}  
+            handleChangePassword={handleChangePassword}
           />
-        :
+          :
           blogView()
-          
       }
     </div>
   )
