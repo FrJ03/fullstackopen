@@ -63,16 +63,16 @@ test('Renders blog like button', async () => {
       name: 'name'
     }
   }
-  const deleteBlog = () => 1
-  const sortBlogs = () => 1
+  const deleteBlog = vi.fn()
+  const addLikes = vi.fn()
 
-  const { container } = render(<Blog blog={blog} deleteBlog={deleteBlog} sortBlogs={sortBlogs}/>)
+  const { container } = render(<Blog blog={blog} deleteBlog={deleteBlog} addLikes={addLikes}/>)
 
   const user = userEvent.setup()
   const showButton = screen.getByText('show')
   await user.click(showButton)
 
-  const likeButton = screen.getByText('like')
+  const likeButton = screen.getByTestId('likeButton')
   await user.click(likeButton)
   await user.click(likeButton)
 

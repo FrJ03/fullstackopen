@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, sortBlogs, deleteBlog }) => {
+const Blog = ({ blog, addLikes, deleteBlog }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -22,17 +21,13 @@ const Blog = ({ blog, sortBlogs, deleteBlog }) => {
     event.preventDefault()
     blog.likes += 1
     setLikes(blog.likes)
-    blogService.update(blog)
-    sortBlogs()
+    addLikes(event, blog)
   }
 
   const removeBlog = async (event) => {
     event.preventDefault()
     if(window.confirm(`Remove blog ${blog.title} by ${blog.author}`)){
-      const status = await blogService.deleteBlog(blog)
-      if(status === 200){
-        deleteBlog(blog)
-      }
+      deleteBlog(event, blog)
     }
   }
 
@@ -50,7 +45,7 @@ const Blog = ({ blog, sortBlogs, deleteBlog }) => {
           {blog.url}
         </div>
         <div>
-          {`likes ${likes}`} <button onClick={addLike}>like</button>
+          {`likes ${likes}`} <button data-testid='likeButton' onClick={addLike}>like</button>
         </div>
         <div>
           {

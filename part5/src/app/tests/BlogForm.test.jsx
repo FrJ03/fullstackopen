@@ -6,11 +6,11 @@ test('Send blog', async () => {
   const createBlog = vi.fn()
   const user = userEvent.setup()
 
-  const { container } =render(<BlogForm handleCreateBlog={createBlog}/>)
+  render(<BlogForm handleCreateBlog={createBlog}/>)
 
-  const titleInput = container.querySelector('.title-input')
-  const authorInput = container.querySelector('.author-input')
-  const urlInput = container.querySelector('.url-input')
+  const titleInput = screen.getByTestId('title')
+  const authorInput = screen.getByTestId('author')
+  const urlInput = screen.getByTestId('url')
   const sendButton = screen.getByText('create')
 
   await user.type(titleInput, 'title')

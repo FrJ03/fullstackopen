@@ -8,8 +8,8 @@ const BlogForm = (props) => {
   const handleCreateBlog = async (event) => {
     event.preventDefault()
     props.handleCreateBlog(event, {
-      author: title,
-      title: author,
+      author: author,
+      title: title,
       url: url
     })
     try {
@@ -27,7 +27,7 @@ const BlogForm = (props) => {
         <label form='title-input'>title: </label>
         <input
           id='title-input'
-          className='title-input'
+          data-testid='title'
           value={title}
           onChange={({ target }) => setTitle(target.value)}
         />
@@ -36,7 +36,7 @@ const BlogForm = (props) => {
         <label form='author-input'>author: </label>
         <input
           id='author-input'
-          className='author-input'
+          data-testid='author'
           value={author}
           onChange={({ target }) => setAuthor(target.value)}
         />
@@ -45,7 +45,7 @@ const BlogForm = (props) => {
         <label form='url-input'>url: </label>
         <input
           id='url-input'
-          className='url-input'
+          data-testid='url'
           value={url}
           onChange={({ target }) => setUrl(target.value)}
         />

@@ -88,12 +88,19 @@ const App = () => {
     }
   }
 
-  const sortBlogList = () => setBlogs( sortBlogs(blogs) )
+  const addLikes = (event, blog) => {
+    event.preventDefault()
+    blogService.update(blog)
+    setBlogs( sortBlogs(blogs) )
+  }
 
-  const deleteBlog = (blog) => {
-    let newBlogs = [...blogs]
-    newBlogs = newBlogs.filter(b => String(blog.id) !== String(b.id))
-    setBlogs(newBlogs)
+  const deleteBlog = async (blog) => {
+    const status = await blogService.deleteBlog(blog)
+    if(status === 200){
+      let newBlogs = [...blogs]
+      newBlogs = newBlogs.filter(b => String(blog.id) !== String(b.id))
+      setBlogs(newBlogs)
+    }
   }
 
   const blogView = () => (
@@ -111,7 +118,7 @@ const App = () => {
         />
       </Togglable>
       {blogs.map((blog) =>
-        <Blog key={blog.id} blog={blog} sortBlogs={sortBlogList} deleteBlog={deleteBlog}/>
+        <Blog key={blog.id} blog={blog} addLikes={addLikes} deleteBlog={deleteBlog}/>
       )}
     </>
   )
