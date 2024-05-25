@@ -35,7 +35,7 @@ const Blog = ({ blog, addLikes, deleteBlog }) => {
     <div style={blogStyle}>
       <div style={hideWhenVisible}>
         {blog.title} {blog.author}
-        <button onClick={toggleVisibility}>show</button>
+        <button data-testid='showButton' onClick={toggleVisibility}>show</button>
       </div>
       <div style={showWhenVisible}>
         <div>
@@ -63,7 +63,7 @@ const Blog = ({ blog, addLikes, deleteBlog }) => {
 }
 
 Blog.propTypes = {
-  sortBlogs: PropTypes.func.isRequired,
+  addLikes: PropTypes.func.isRequired,
   deleteBlog: PropTypes.func.isRequired,
   blog: PropTypes.object.isRequired
 }
