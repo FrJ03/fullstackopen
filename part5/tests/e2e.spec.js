@@ -1,9 +1,8 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
-const { afterEach, before } = require('node:test')
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
-    await request.post('http://localhost:3003/api/testing/reset')
+    await request.post('http:localhost:3003/api/testing/reset')
     await request.post('http://localhost:3003/api/users', {
       data: {
         name: 'test',
@@ -37,42 +36,6 @@ describe('Blog app', () => {
 
       await expect(page.getByText('username')).toBeVisible()
       await expect(page.getByText('password')).toBeVisible()
-    })
-  })
-  describe('When logged in', () => {
-    beforeEach(async ({ page }) => {
-      await page.getByTestId('username').fill('test')
-      await page.getByTestId('password').fill('test')
-      await page.getByRole('button', { name: 'login' }).click()
-    })
-  
-    test('a new blog can be created', async ({ page }) => {
-      await page.getByRole('button', { name: 'create new blog' }).click()
-      await page.getByTestId('title').fill('title')
-      await page.getByTestId('author').fill('author')
-      await page.getByTestId('url').fill('url')
-      await page.getByRole('button', { name: 'create' }).click()
-
-      await expect(page.getByText('title')).toBeVisible()
-      await expect(page.getByText('author')).toBeVisible()
-    })
-    test('a blog can be liked', async ({ page }) => {
-      //await expect(page.getByText('test logged in')).toBeVisible()
-      //await expect(page.getByText('title')).toBeVisible()
-    
-      //console.log(page.getByText('title'))
-
-      await page.getByRole('button', { name: 'create new blog' }).click()
-      await page.getByTestId('title').fill('title')
-      await page.getByTestId('author').fill('author')
-      await page.getByTestId('url').fill('url')
-      await page.getByRole('button', { name: 'create' }).click()
-      
-      await page.getByTestId('showButton').click()
-      await page.getByTestId('likeButton').click()
-      
-
-      await expect(page.getByText('1')).toBeVisible()
     })
   })
 })

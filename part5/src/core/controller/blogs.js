@@ -16,7 +16,7 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
     if(Object.hasOwn(request.body, 'title') && Object.hasOwn(request.body, 'url')){
         let blogJSON = request.body
 
-        const user = await User.findOne({_id: request.user.id})
+        const user = await User.findById(request.user.id)
 
         blogJSON.user = user.id
 
