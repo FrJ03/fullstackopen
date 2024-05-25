@@ -55,7 +55,7 @@ const Blog = ({ blog, addLikes, deleteBlog }) => {
           }
         </div>
         <div>
-          <button onClick={removeBlog}>Remove</button>
+          <button data-testid='deleteButton' onClick={removeBlog}>Remove</button>
         </div>
       </div>
     </div>
