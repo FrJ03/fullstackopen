@@ -94,7 +94,8 @@ const App = () => {
     setBlogs( sortBlogs(blogs) )
   }
 
-  const deleteBlog = async (blog) => {
+  const deleteBlog = async (event, blog) => {
+    event.preventDefault()
     const status = await blogService.deleteBlog(blog)
     if(status === 200){
       let newBlogs = [...blogs]
