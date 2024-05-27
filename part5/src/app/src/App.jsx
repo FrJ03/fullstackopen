@@ -107,7 +107,7 @@ const App = () => {
   const blogView = () => (
     <>
       <p>
-        {`${user.name} logged in`}<button onClick={handleLogout}>logout</button>
+        {`${user.name} logged in`}<button data-testid='logoutButton' onClick={handleLogout}>logout</button>
       </p>
       <Togglable
         buttonLabel={'create new blog'}
@@ -119,7 +119,7 @@ const App = () => {
         />
       </Togglable>
       {blogs.map((blog) =>
-        <Blog key={blog.id} blog={blog} addLikes={addLikes} deleteBlog={deleteBlog}/>
+        <Blog key={blog.id} blog={blog} addLikes={addLikes} deleteBlog={deleteBlog} username={user.username}/>
       )}
     </>
   )
