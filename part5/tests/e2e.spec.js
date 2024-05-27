@@ -89,7 +89,29 @@ describe('Blog app', () => {
       
       await expect(page.getByText('title')).not.toBeDefined()
     })
-    
+    test('liked blogs ordered', async ({ page }) => {
+      await page.getByRole('button', { name: 'create new blog' }).click()
+      await page.getByTestId('title').fill('title')
+      await page.getByTestId('author').fill('author')
+      await page.getByTestId('url').fill('url')
+      await page.getByRole('button', { name: 'create' }).click()
+      
+      await page.getByTestId('showButton').click()
+      await page.getByTestId('likeButton').click()
+      await page.getByRole('button', { name: 'hide' }).click()
+      
+      await page.getByRole('button', { name: 'create new blog' }).click()
+      await page.getByTestId('title').fill('title2')
+      await page.getByTestId('author').fill('author2')
+      await page.getByTestId('url').fill('url')
+      await page.getByRole('button', { name: 'create' }).click()
+
+      await page.getByTestId('showButton').click()
+      await page.getByTestId('likeButton').click()
+      await page.getByTestId('likeButton').click()
+
+      await expect(page.getByTestId('title-and-author')[0]).toBe('title2 author2')
+    })
   })
   describe('When logged in with other user', () => {
     beforeEach(async ({ page }) => {

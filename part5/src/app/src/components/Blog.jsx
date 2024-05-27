@@ -33,7 +33,7 @@ const Blog = ({ blog, addLikes, deleteBlog, username }) => {
 
   return (
     <div style={blogStyle}>
-      <div style={hideWhenVisible}>
+      <div style={hideWhenVisible} data-testid='title-and-author'>
         {blog.title} {blog.author}
         <button data-testid='showButton' onClick={toggleVisibility}>show</button>
       </div>
